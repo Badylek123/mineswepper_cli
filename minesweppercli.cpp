@@ -35,6 +35,7 @@ private:
 	int columns;
 	int totalMines;
 	vector<vector<Cell>> board;
+    int width;
 
 public:
 	Minesweeper(int rows, int columns, int mines) 
@@ -43,6 +44,7 @@ public:
     	this->columns = columns;
     	totalMines = mines;
         board.resize(rows, vector<Cell>(columns, {false, false, 0, false}));
+        this->width = (rows>columns) ? (rows/10)+1 : (columns/10)+1;
 	}
 	void placeMines() 
     {
@@ -140,21 +142,21 @@ public:
 
     void displayBoard() 
     {
-        cout << "  ";
+        cout << setw(width) << " ";
         for (int j = 0; j < columns; j++) 
         {
-            cout << j << " ";
+            cout << setw(width) << j+1;
         }
         cout << '\n';
         for (int i = 0; i < rows; i++) 
         {
-            cout << i << " ";
+            cout << setw(width) << i+1;
             for (int j = 0; j < columns; j++) 
             {
-                if (!board[i][j].isRevealed && !board[i][j].isFlag)	    cout << "- ";
-		        else if (board[i][j].isRevealed && board[i][j].isMine)	cout << _red_ << "* " << _default_;
-		        else if (board[i][j].isFlag)				            cout << _blue_ << "! " << _default_;
-		        else							                        cout << _green_ << board[i][j].adjacentMines << " " << _default_;
+                if (!board[i][j].isRevealed && !board[i][j].isFlag)	    cout << setw(width) << "-";
+		        else if (board[i][j].isRevealed && board[i][j].isMine)	cout << _red_ << setw(width) << "*" << _default_;
+		        else if (board[i][j].isFlag)				            cout << _blue_ << setw(width) <<"!" << _default_;
+		        else							                        cout << _green_ << setw(width) << board[i][j].adjacentMines << _default_;
             }
             cout << '\n';
         }
@@ -179,6 +181,8 @@ public:
             if (flagOrRev!='O' && flagOrRev!='o' && flagOrRev!='F' && flagOrRev!='f') flagOrRev=0;
             cout << "Podaj wspolrzedne pola (rzad <spacja> kolumna) : ";
             cin >> row >> col;
+            row--;
+            col--;
             if (!isValid(row, col) || flagOrRev==0) 
             {
                 cout << "Cos nie wyszlo (bledne dane?). Sprobuj ponownie" << '\n';  

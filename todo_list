@@ -1,2 +1,1 @@
-Debug displaying board for bigger boards than 10x10 (I was told to use iomanip)
 Add the "safe first move" to emulate the behaviour of original mineswepper
