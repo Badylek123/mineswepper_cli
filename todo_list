@@ -1,0 +1,3 @@
+Debug displaying board for bigger boards than 10x10
+Add option to flag cell as dangerous
+Check if clearScreen work on Windows system
