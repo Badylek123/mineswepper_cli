@@ -7,7 +7,7 @@
 //colors (dunno if does it work on windoze, stop using this bloat)
 #define _red_ "\033[1;31m"
 #define _green_ "\033[1;32m"
-#define _yellow_ "\033[1;33m"
+#define _blue_ "\033[1;34m"
 #define _default_ "\033[0m"
 
 #ifdef _WIN32
@@ -153,7 +153,7 @@ public:
             {
                 if (!board[i][j].isRevealed && !board[i][j].isFlag)	    cout << "- ";
 		        else if (board[i][j].isRevealed && board[i][j].isMine)	cout << _red_ << "* " << _default_;
-		        else if (board[i][j].isFlag)				            cout << _yellow_ << "! " << _default_;
+		        else if (board[i][j].isFlag)				            cout << _blue_ << "! " << _default_;
 		        else							                        cout << _green_ << board[i][j].adjacentMines << " " << _default_;
             }
             cout << '\n';
@@ -196,6 +196,9 @@ public:
             }
             if (isGameWon()) 
             {
+                clearScreen;
+                revealAllCells();
+                displayBoard();
                 cout << "Przezyles! Gratulacje przesyla Badyl." << '\n';
                 break;
             }
