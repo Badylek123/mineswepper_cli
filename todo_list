@@ -1,3 +1,4 @@
 Debug displaying board for bigger boards than 10x10
-Add option to flag cell as dangerous
+Debug option to flag cell as dangerous (so revealing doesn't unflag the cell)
 Check if clearScreen work on Windows system
+Maybe add English interface
