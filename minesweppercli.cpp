@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <math.h>
 #include <stdlib.h>
 #include <time.h>
-//to do: use iomanip to debug displaying board
 #include <iomanip>
 //colors (dunno if does it work on windoze, stop using this bloat)
 #define _red_ "\033[1;31m"
@@ -44,7 +44,7 @@ public:
     	this->columns = columns;
     	totalMines = mines;
         board.resize(rows, vector<Cell>(columns, {false, false, 0, false}));
-        this->width = (rows>columns) ? (rows/10)+1 : (columns/10)+1;
+        this->width = (rows>columns) ? (log10(rows))+2 : (log10(rows))+2;
 	}
 	void placeMines() 
     {
@@ -147,9 +147,16 @@ public:
         {
             cout << setw(width) << j+1;
         }
-        cout << '\n';
+        int iter=0;
+        do
+        {
+            cout << '\n';
+            iter++;
+        }
+        while(iter<width-2);
         for (int i = 0; i < rows; i++) 
         {
+            iter=0;
             cout << setw(width) << i+1;
             for (int j = 0; j < columns; j++) 
             {
@@ -158,7 +165,13 @@ public:
 		        else if (board[i][j].isFlag)				            cout << _blue_ << setw(width) <<"!" << _default_;
 		        else							                        cout << _green_ << setw(width) << board[i][j].adjacentMines << _default_;
             }
-            cout << '\n';
+            do
+            {
+                cout << '\n';
+                iter++;
+            }
+        while(iter<width-2);
+ 
         }
         
     }
