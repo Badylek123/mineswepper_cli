@@ -2,8 +2,16 @@
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
+//to do: use iomanip to debug displaying board
+#include <iomanip>
+//colors (dunno if does it work on windoze, stop using this bloat)
+#define _red_ "\033[1;31m"
+#define _green_ "\033[1;32m"
+#define _yellow_ "\033[1;33m"
+#define _default_ "\033[0m"
 
-#ifdef __WIN32
+#ifdef _WIN32
+#include <windows.h>
 #define clearScreen system("CLS")
 #else
 #define clearScreen system("clear")
@@ -78,12 +86,11 @@ public:
     {
         return (row >= 0 && row < rows && col >= 0 && col < columns);
     }
-    void revealCell(int row, int col) // gonna change this cause i repeated myself, but clean the mess first 
+
+    void revealCell(int row, int col)
     {
         if (!isValid(row, col) || board[row][col].isRevealed || board[row][col].isFlag) return;
-
         board[row][col].isRevealed = true;
-
         if (board[row][col].adjacentMines == 0) 
         {
             int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
@@ -145,15 +152,14 @@ public:
             for (int j = 0; j < columns; j++) 
             {
                 if (!board[i][j].isRevealed && !board[i][j].isFlag)	    cout << "- ";
-		        else if (board[i][j].isRevealed && board[i][j].isMine)	cout << "* ";
-		        else if (board[i][j].isFlag)				            cout << "! ";
-		        else							                        cout << board[i][j].adjacentMines << " ";
+		        else if (board[i][j].isRevealed && board[i][j].isMine)	cout << _red_ << "* " << _default_;
+		        else if (board[i][j].isFlag)				            cout << _yellow_ << "! " << _default_;
+		        else							                        cout << _green_ << board[i][j].adjacentMines << " " << _default_;
             }
             cout << '\n';
         }
         
     }
-
 
     void play() 
     {
@@ -162,38 +168,32 @@ public:
 
         while (true) 
         {
+            //clear the screen for every loop execution
             clearScreen;    
             displayBoard();
             char flagOrRev;
-            string dump;
+            string dump;    //a dump input just to let user to read the comunicates from output
             int row, col;
-            cout << "Wybierz opcje: (O)dsłoń, (F)laguj\n";
+            cout << "Wybierz opcje: (O)dsłoń, (F)laguj\n";      //o - reveal, f - flag
             cin >> flagOrRev;
             if (flagOrRev!='O' && flagOrRev!='o' && flagOrRev!='F' && flagOrRev!='f') flagOrRev=0;
             cout << "Podaj wspolrzedne pola (rzad <spacja> kolumna) : ";
             cin >> row >> col;
             if (!isValid(row, col) || flagOrRev==0) 
             {
-                cout << "Cos nie wyszlo (bledne dane?). Sprobuj ponownie" << '\n';
+                cout << "Cos nie wyszlo (bledne dane?). Sprobuj ponownie" << '\n';  
                 cin >> dump;
                 continue;
             }
             if ((flagOrRev == 'o' || flagOrRev == 'O') && !board[row][col].isFlag)
                 revealCell(row, col);
-            else
+            else if (flagOrRev == 'f' || flagOrRev == 'F')
                 board[row][col].isFlag = !board[row][col].isFlag;
             if (board[row][col].isMine && board[row][col].isRevealed) 
             {
                 gameOver();
                 break;
             }
-            //if((flagOrRev=='o' || flagOrRev=='O') || !board[row][col].isFlag) 	revealCell(row, col);
-            //else if(flagOrRev=='f' || flagOrRev=='F')                           board[row][col].isFlag=true;
-            //if (board[row][col].isMine)
-            //{
-            //    gameOver();
-            //    break;
-            //}
             if (isGameWon()) 
             {
                 cout << "Przezyles! Gratulacje przesyla Badyl." << '\n';
@@ -206,13 +206,10 @@ public:
 int main() 
 {
     srand(static_cast<unsigned>(time(0)));
-
     int rows, columns, mines;
     cout << "Witaj w Saperze!\nPodaj liczbe rzedow, kolumn i min (oddzielone spacjami):\n";
     cin >> rows >> columns >> mines;
-
     Minesweeper game(rows, columns, mines);
     game.play();
-
     return 0;
 }
