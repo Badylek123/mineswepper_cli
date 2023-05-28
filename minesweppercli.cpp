@@ -204,7 +204,7 @@ public:
             }
             if ((flagOrRev == 'o' || flagOrRev == 'O') && !board[row][col].isFlag)
                 revealCell(row, col);
-            else if (flagOrRev == 'f' || flagOrRev == 'F')
+            else if (flagOrRev == 'f' || flagOrRev == 'F' && !board[row][col].isRevealed)
                 board[row][col].isFlag = !board[row][col].isFlag;
             if (board[row][col].isMine && board[row][col].isRevealed) 
             {
